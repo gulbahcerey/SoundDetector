@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" id="root">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sound Detector</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div>
+        <h1>Sound Detector</h1>
+        <p class="subtitle">Real-time environmental sound monitoring</p>
+      </div>
+
+      <div class="header-icons">
+            <button id="themeBtn" class="icon-btn" type="button" aria-label="Toggle theme">🌙</button>
+            <button class="icon-btn" type="button" aria-label="Menu">≡</button>
+            <button class="icon-btn" type="button" aria-label="Profile">👤</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <aside class="card history">
+        <h3>🕘 History</h3>
+        <div class="empty" id="historyBox">No detections yet</div>
+        <div class="hint">Start listening to detect sounds</div>
+        <div class="big-icon">🕘</div>
+      </aside>
+
+      <main class="center">
+        <section class="card stt">
+          <h3>💬 Speech-to-Text</h3>
+          <div class="stt-box" id="sttBox">🎤 Speak to see transcription…</div>
+        </section>
+
+        <button id="startBtn" class="listen-btn" type="button">
+          <div class="listen-text">
+            <strong id="btnTitle">Start Listening</strong>
+            <span id="btnSub">TAP TO BEGIN</span>
+          </div>
+        </button>
+
+        <section class="card logs">
+          <h3>ℹ️ Update Logs</h3>
+          <pre id="logBox">System initialized
+Audio classifier loaded
+Ready to detect sounds</pre>
+        </section>
+      </main>
+
+      <aside class="right">
+        <div class="card audio">
+          <h3>🔊 Audios</h3>
+            <div class="audio-center">
+            <div class="audio-icon">🔊</div>
+            <div id="audioState">No audio detected</div>
+            </div>
+        </div>
+
+        <div class="card info">
+          <h3>ℹ️ Info</h3>
+          <div class="info-row" id="listenState"></div>
+          <div class="info-row" id="statusRow">Status: Loading…</div>
+          <div class="info-row">Detections: <span id="detCount">0</span></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -68,23 +68,27 @@ def run_realtime(output_queue=None, stop_event=None):
     print("\nReal-time listening started. Press Ctrl+C to stop.")
     print("Tip: make a sound (talk, clap, play alarm) near mic.\n")
 
-    last_print_time = 0.0
+    last_silence_print = 0.0
+    last_debug_print = 0.0
 
     with sd.InputStream(samplerate=sr, channels=1, dtype="float32", blocksize=chunk_samples) as stream:
         try:
             while True:
-                if stop_event and stop_event.is_set():
+                if stop_event is not None and stop_event.is_set():
+                    print("Stop event received. Exiting realtime loop.", flush=True)
                     break
                 audio, _ = stream.read(chunk_samples)
                 waveform = audio[:, 0]
 
                 rms = float(np.sqrt(np.mean(waveform ** 2)))
-                print(f"DEBUG rms={rms:.4f}", flush=True)
+                if time.time() - last_debug_print > 1.0:
+                    print(f"DEBUG rms={rms:.4f}", flush=True)
+                    last_debug_print = time.time()
 
                 if rms < 0.002:
-                    if time.time() - last_print_time > 2.0:
+                    if time.time() - last_silence_print > 2.0:
                         print("Silence...")
-                        last_print_time = time.time()
+                        last_silence_print = time.time()
                     continue
 
                 scores, _, _ = yamnet(waveform)
@@ -133,7 +137,7 @@ def run_realtime(output_queue=None, stop_event=None):
                     if top_label != "Unknown" and map_to_category(top_label) == stable_category:
                         stable_label = top_label
 
-                if output_queue:
+                if output_queue is not None:
                     output_queue.put({
                         "category": stable_category,
                         "label": stable_label,
